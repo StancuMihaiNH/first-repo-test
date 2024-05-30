@@ -1,10 +1,27 @@
-name: install-netify-package
-on: [push]
+name: Deploy to Netlify
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  check-netlify-version:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-      - run: npm install netlify-cli -g
-      - run: npm netlify -v
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the site
+        run: npm run build
+
+      - name: Install Netlify CLI globally
+        run: npm install netlify-cli -g
